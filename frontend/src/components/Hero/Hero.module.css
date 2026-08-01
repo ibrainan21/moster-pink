@@ -1,0 +1,18 @@
+.hero{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    margin:20px 0 40px;
+}
+
+.banner{
+    width:95%;
+    max-width:1350px;
+    height:380px;
+
+    object-fit:cover;
+
+    border-radius:18px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
