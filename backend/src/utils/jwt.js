@@ -1,9 +1,21 @@
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1d";
+export const signToken = (payload) => {
+  const secret = process.env.JWT_SECRET;
+  const expiresIn = process.env.JWT_EXPIRES_IN || "1d";
 
-export const signToken = (payload) =>
-  jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+  if (!secret) {
+    throw new Error(
+      "JWT_SECRET no está definido. Revisa tu archivo .env y que server.js importe './config/env.js' primero."
+    );
+  }
 
-export const verifyToken = (token) => jwt.verify(token, JWT_SECRET);
+  return jwt.sign(payload, secret, {
+    expiresIn,
+  });
+};
+
+export const verifyToken = (token) => {
+  const secret = process.env.JWT_SECRET;
+  return jwt.verify(token, secret);
+};
