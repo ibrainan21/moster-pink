@@ -1,0 +1,269 @@
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+  min-height: calc(100vh - 300px);
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #212121;
+  margin-bottom: 24px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #212121;
+  margin-bottom: 16px;
+}
+
+.state {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.error {
+  background: #ffe1e1;
+  color: #c0392b;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.addressList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.addressCard {
+  display: flex;
+  gap: 12px;
+  border: 1.5px solid #f0e0e6;
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.addressCard:hover {
+  border-color: #f5b8cd;
+}
+
+.addressCardActive {
+  border-color: #ff5c93;
+  background: #fff5f8;
+}
+
+.addressCard input {
+  margin-top: 4px;
+  accent-color: #ff5c93;
+}
+
+.addressName {
+  font-weight: 600;
+  font-size: 14px;
+  color: #212121;
+}
+
+.addressDetail {
+  font-size: 13px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.addAddressButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px dashed #f0b8cd;
+  background: none;
+  color: #ff5c93;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.addressForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.formRow input {
+  border: 1.5px solid #f0e0e6;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  color: #212121;
+}
+
+.formActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.saveButton {
+  border: none;
+  background: #ff5c93;
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.saveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancelButton {
+  border: none;
+  background: none;
+  color: #888;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.notes {
+  width: 100%;
+  border: 1.5px solid #f0e0e6;
+  border-radius: 10px;
+  padding: 12px;
+  font-family: inherit;
+  font-size: 13px;
+  color: #212121;
+  resize: vertical;
+  min-height: 70px;
+  margin-bottom: 12px;
+}
+
+.coupon {
+  width: 100%;
+  border: 1.5px solid #f0e0e6;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  color: #212121;
+}
+
+.summary {
+  background: #fff5f8;
+  border-radius: 16px;
+  padding: 24px;
+  position: sticky;
+  top: 20px;
+}
+
+.summary h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #212121;
+  margin-bottom: 16px;
+}
+
+.summaryItems {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+  color: #555;
+}
+
+.summaryTotal {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 700;
+  color: #212121;
+  border-top: 1px solid #f0d8e2;
+  padding-top: 14px;
+  margin-bottom: 18px;
+}
+
+.confirmButton {
+  width: 100%;
+  border: none;
+  border-radius: 24px;
+  background: #ff5c93;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-bottom: 12px;
+}
+
+.confirmButton:hover:not(:disabled) {
+  background: #e6497f;
+}
+
+.confirmButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.backLink {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+}

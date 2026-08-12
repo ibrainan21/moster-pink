@@ -1,18 +1,129 @@
-.hero{
-    width:100%;
-    display:flex;
-    justify-content:center;
-    margin:20px 0 40px;
+.hero {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  max-width: 1350px;
+  margin: 20px auto 40px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
-.banner{
-    width:95%;
-    max-width:1350px;
-    height:380px;
+/* Imagen del banner a todo el ancho, tal como estaba originalmente.
+   object-fit: contain (no "cover") a propósito: el banner trae texto/logo
+   integrado en la propia imagen, y con "cover" el navegador recorta los
+   bordes para llenar el espacio -- eso se comería ese texto. Con
+   "contain" se ve la imagen COMPLETA siempre, y el espacio sobrante (si lo
+   hay) se rellena con el fondo rosa claro en vez de dejarlo en blanco. */
+.imagePanel {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff0f5;
+}
 
-    object-fit:cover;
+.banner {
+  width: 100%;
+  height: 380px;
+  object-fit: contain;
+  display: block;
+}
 
-    border-radius:18px;
+/* Panel de texto: su propia franja completa, DEBAJO de la imagen. Nunca
+   comparte espacio con el banner, así que no hay forma de que se encimen. */
+.textPanel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 32px 44px;
+  background: #fff;
+}
 
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #ffe1ec;
+  color: #ff5c93;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #212121;
+  line-height: 1.15;
+  margin-bottom: 14px;
+  max-width: 640px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 24px;
+  max-width: 520px;
+}
+
+.actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.primaryButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 24px;
+  border-radius: 26px;
+  background: #ff5c93;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.primaryButton:hover {
+  background: #e6497f;
+}
+
+.secondaryButton {
+  display: flex;
+  align-items: center;
+  padding: 13px 24px;
+  border-radius: 26px;
+  border: 1.5px solid #ff5c93;
+  color: #ff5c93;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.secondaryButton:hover {
+  background: #fff0f5;
+}
+
+@media (max-width: 768px) {
+  .banner {
+    height: 220px;
+  }
+  .textPanel {
+    padding: 26px 20px;
+  }
+  .title {
+    font-size: 26px;
+  }
 }

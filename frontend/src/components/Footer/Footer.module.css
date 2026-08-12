@@ -1,0 +1,96 @@
+.footer {
+  background: #fff5f8;
+  margin-top: 40px;
+  padding-top: 44px;
+}
+
+.grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 50px 30px;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 30px;
+}
+
+.brand {
+  font-size: 22px;
+  font-weight: 700;
+  color: #212121;
+  margin-bottom: 10px;
+}
+
+.brand span {
+  color: #ff5c93;
+}
+
+.tagline {
+  font-size: 13px;
+  color: #777;
+  max-width: 260px;
+  margin-bottom: 16px;
+}
+
+.socialIcons {
+  display: flex;
+  gap: 10px;
+}
+
+.socialIcons a {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff5c93;
+  transition: 0.2s;
+}
+
+.socialIcons a:hover {
+  background: #ff5c93;
+  color: #fff;
+}
+
+.heading {
+  font-size: 14px;
+  font-weight: 700;
+  color: #212121;
+  margin-bottom: 14px;
+}
+
+.grid ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.grid ul li,
+.grid ul li a {
+  font-size: 13px;
+  color: #777;
+  text-decoration: none;
+}
+
+.grid ul li a:hover {
+  color: #ff5c93;
+}
+
+.bottom {
+  border-top: 1px solid #f3d9e3;
+  padding: 16px 50px;
+  text-align: center;
+}
+
+.bottom p {
+  font-size: 12px;
+  color: #999;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

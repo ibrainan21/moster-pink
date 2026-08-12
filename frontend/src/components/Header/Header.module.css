@@ -35,6 +35,7 @@
   align-items: center;
   gap: 12px;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .logoImage{
@@ -61,4 +62,142 @@
     margin:3px 0 0;
     color:#888;
     font-size:11px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.navLink {
+  color: #444;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+  transition: 0.2s;
+}
+
+.navLink:hover {
+  color: #ff5c93;
+}
+
+.navLinkActive {
+  color: #ff5c93;
+  border-bottom-color: #ff5c93;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f7f7f7;
+  border-radius: 22px;
+  padding: 8px 16px;
+  color: #999;
+}
+
+.search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  width: 160px;
+}
+
+.icon {
+  color: #333;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.icon:hover {
+  color: #ff5c93;
+}
+
+.cartLink {
+  position: relative;
+  display: inline-flex;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #ff5c93;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.userMenu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.userLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: #333;
+}
+
+.userName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #212121;
+}
+
+.userLink:hover .userName {
+  color: #ff5c93;
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  border: none;
+  background: none;
+  color: #999;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.logoutButton:hover {
+  color: #ff5c93;
+}
+
+.menuButton {
+  display: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #333;
+}
+
+@media (max-width: 900px) {
+  .nav,
+  .search {
+    display: none;
+  }
+  .menuButton {
+    display: flex;
+  }
 }
