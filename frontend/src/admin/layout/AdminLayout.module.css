@@ -1,0 +1,74 @@
+.shell {
+  display: flex;
+  min-height: 100vh;
+  background: #f7f4f5;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: 14px 28px;
+  border-bottom: 1px solid #f0e0e6;
+}
+
+.storeLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #888;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.storeLink:hover {
+  color: #ff5c93;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.userName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #212121;
+}
+
+.userRole {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ff5c93;
+  background: #fff5f8;
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+.logoutButton {
+  border: none;
+  background: none;
+  color: #888;
+  cursor: pointer;
+  display: flex;
+  padding: 4px;
+}
+
+.logoutButton:hover {
+  color: #c0392b;
+}
+
+.content {
+  flex: 1;
+  padding: 28px;
+  min-width: 0;
+}

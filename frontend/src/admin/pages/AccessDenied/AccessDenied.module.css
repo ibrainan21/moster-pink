@@ -1,0 +1,30 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  padding: 20px;
+  background: #fff5f8;
+}
+
+.page h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #212121;
+  margin-top: 8px;
+}
+
+.page p {
+  color: #666;
+  font-size: 14px;
+  max-width: 360px;
+}
+
+.link {
+  margin-top: 12px;
+  color: #ff5c93;
+  font-weight: 600;
+}
