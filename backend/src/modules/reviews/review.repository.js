@@ -19,6 +19,25 @@ class ReviewRepository {
     return rows;
   }
 
+  // Reseñas recientes de TODA la tienda (no de un producto en particular).
+  // Se usa en la sección "Lo que dicen nuestros clientes" del Home: solo
+  // reseñas reales y aprobadas, nunca testimonios inventados.
+  async listRecentApproved(limit = 6) {
+    const [rows] = await pool.query(
+      `SELECT r.id, r.rating, r.comment, r.created_at,
+              CONCAT(u.first_name, ' ', LEFT(u.last_name, 1), '.') AS customer_name,
+              p.name AS product_name
+       FROM reviews r
+       INNER JOIN users u ON r.user_id = u.id
+       INNER JOIN products p ON r.product_id = p.id
+       WHERE r.is_approved = TRUE AND r.comment IS NOT NULL AND r.comment <> ''
+       ORDER BY r.created_at DESC
+       LIMIT ?`,
+      [Number(limit)]
+    );
+    return rows;
+  }
+
   async listByUser(userId) {
     const [rows] = await pool.query(
       `SELECT r.*, p.name AS product_name, p.slug

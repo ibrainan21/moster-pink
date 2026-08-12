@@ -9,6 +9,12 @@ class ReviewController {
     res.json(ApiResponse.success("Opiniones obtenidas correctamente.", result));
   });
 
+  // GET /api/reviews/recent  (público, testimonios reales del Home)
+  listRecent = asyncHandler(async (req, res) => {
+    const reviews = await ReviewService.listRecent(req.query.limit);
+    res.json(ApiResponse.success("Reseñas recientes obtenidas correctamente.", reviews));
+  });
+
   // GET /api/reviews/mine
   listMine = asyncHandler(async (req, res) => {
     const reviews = await ReviewService.listMine(req.user.id);

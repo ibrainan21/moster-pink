@@ -19,6 +19,9 @@ router.get(
   ReviewController.listByProduct
 );
 
+// Lectura pública: reseñas recientes para el Home (testimonios reales).
+router.get("/recent", ReviewController.listRecent);
+
 // El resto requiere sesión iniciada.
 router.use(verifyAuth);
 

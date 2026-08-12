@@ -11,6 +11,11 @@ class ReviewService {
     return { reviews, summary };
   }
 
+  // Para el Home (sección de testimonios).
+  async listRecent(limit) {
+    return ReviewRepository.listRecentApproved(limit);
+  }
+
   async listMine(userId) {
     return ReviewRepository.listByUser(userId);
   }

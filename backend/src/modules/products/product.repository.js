@@ -27,8 +27,16 @@ class ProductRepository {
       params.push(subcategoryId);
     }
     if (search) {
-      conditions.push("(p.name LIKE ? OR p.sku LIKE ? OR p.description LIKE ?)");
-      params.push(`%${search}%`, `%${search}%`, `%${search}%`);
+      // Además de nombre/SKU/descripción del producto, busca también por
+      // SKU de variante (p.ej. "OSO-PELUCHE-UNICO") — es lo que realmente
+      // se tiene a mano al hacer un ajuste rápido de inventario (RF-023),
+      // y sku de producto/variante son columnas independientes.
+      conditions.push(
+        "(p.name LIKE ? OR p.sku LIKE ? OR p.description LIKE ? OR EXISTS (" +
+          "SELECT 1 FROM variants v WHERE v.product_id = p.id AND v.sku LIKE ?" +
+          "))"
+      );
+      params.push(`%${search}%`, `%${search}%`, `%${search}%`, `%${search}%`);
     }
     if (status) {
       conditions.push("p.status = ?");
