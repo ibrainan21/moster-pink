@@ -1,0 +1,215 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #212121;
+}
+
+.addButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 20px;
+  background: #ff5c93;
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.addButton:hover {
+  background: #e6497f;
+}
+
+.state {
+  color: #888;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.error {
+  background: #ffe1e1;
+  color: #c0392b;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 60px 0;
+  color: #888;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.card {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  padding: 18px 20px;
+}
+
+.defaultTag {
+  display: inline-block;
+  background: #fff5f8;
+  color: #ff5c93;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.addressName {
+  font-weight: 600;
+  color: #212121;
+  font-size: 14px;
+}
+
+.addressDetail {
+  color: #888;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.cardActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px solid #f0e0e6;
+  background: #fff;
+  color: #555;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.actionButton:hover {
+  border-color: #ff5c93;
+  color: #ff5c93;
+}
+
+.deleteButton:hover {
+  border-color: #c0392b;
+  color: #c0392b;
+}
+
+.form {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  padding: 22px;
+}
+
+.formTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #212121;
+  margin-bottom: 16px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.form input[type="text"],
+.form input[type="tel"] {
+  border: 1.5px solid #f0e0e6;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #212121;
+  font-family: inherit;
+  width: 100%;
+  transition: 0.2s;
+}
+
+.form input:focus {
+  outline: none;
+  border-color: #ff5c93;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #555;
+  margin: 6px 0 16px;
+}
+
+.formActions {
+  display: flex;
+  gap: 12px;
+}
+
+.saveButton {
+  border: none;
+  border-radius: 20px;
+  background: #ff5c93;
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.saveButton:hover {
+  background: #e6497f;
+}
+
+.saveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancelButton {
+  border: none;
+  background: none;
+  color: #888;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.cancelButton:hover {
+  color: #212121;
+}

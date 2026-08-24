@@ -68,9 +68,16 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  // Permite a páginas como /mi-cuenta/perfil reflejar en el resto de la app
+  // (Header, etc.) los datos que el usuario acaba de editar, sin tener que
+  // volver a pedir /auth/me.
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, loading, isAuthenticated: !!user, login, register, logout }}
+      value={{ user, loading, isAuthenticated: !!user, login, register, logout, updateUser }}
     >
       {children}
     </AuthContext.Provider>

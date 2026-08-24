@@ -3,6 +3,7 @@ import ReviewController from "./review.controller.js";
 import {
   idParamValidation,
   productIdParamValidation,
+  listAllValidation,
   createReviewValidation,
   setApprovedValidation,
 } from "./review.validation.js";
@@ -24,6 +25,16 @@ router.get("/recent", ReviewController.listRecent);
 
 // El resto requiere sesión iniciada.
 router.use(verifyAuth);
+
+// Panel administrativo: todas las reseñas (Administrador y Empleado pueden
+// consultar; moderar/eliminar queda más restringido abajo).
+router.get(
+  "/",
+  authorize("Administrador", "Empleado"),
+  listAllValidation,
+  validate,
+  ReviewController.listAll
+);
 
 router.get("/mine", ReviewController.listMine);
 router.post("/", createReviewValidation, validate, ReviewController.create);

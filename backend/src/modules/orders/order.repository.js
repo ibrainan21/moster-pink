@@ -28,14 +28,14 @@ class OrderRepository {
   // Si se manda couponId, el uso del cupón (coupon_usage + used_count) se
   // registra en la MISMA transacción: o se crean el pedido y el uso del
   // cupón juntos, o no se crea ninguno de los dos.
-  async create({ userId, addressId, warehouseId, lines, shippingCost = 0, discount = 0, notes, createdBy = null, couponId = null }) {
+  async create({ userId, addressId, warehouseId, lines, shippingCost = 0, taxRate = 0, discount = 0, notes, createdBy = null, couponId = null }) {
     const connection = await pool.getConnection();
 
     try {
       await connection.beginTransaction();
 
       const subtotal = lines.reduce((sum, l) => sum + l.quantity * l.unitPrice - (l.discount || 0), 0);
-      const tax = 0;
+      const tax = Math.round(subtotal * (Number(taxRate) / 100) * 100) / 100;
       const total = subtotal + tax + Number(shippingCost) - Number(discount);
 
       let orderNumber = await this.generateNextNumber();
@@ -135,9 +135,24 @@ class OrderRepository {
     return rows[0] || null;
   }
 
+  // Seguimiento público (sin sesión): busca por número de pedido Y correo
+  // juntos, para que nadie pueda enumerar pedidos ajenos adivinando folios
+  // consecutivos (RN de privacidad, no documentada con número propio).
+  async getByOrderNumberAndEmail(orderNumber, email) {
+    const [rows] = await pool.query(
+      `SELECT o.*, CONCAT(u.first_name, ' ', u.last_name) AS customer_name, u.email AS customer_email
+       FROM orders o
+       INNER JOIN users u ON o.user_id = u.id
+       WHERE o.order_number = ? AND u.email = ? AND o.deleted_at IS NULL
+       LIMIT 1`,
+      [orderNumber, email]
+    );
+    return rows[0] || null;
+  }
+
   async getDetails(orderId) {
     const [rows] = await pool.query(
-      `SELECT od.*, v.sku, v.color, v.size, pr.name AS product_name,
+      `SELECT od.*, v.sku, v.color, v.size, pr.id AS product_id, pr.name AS product_name, pr.slug,
               (SELECT image_url FROM product_images pi WHERE pi.product_id = pr.id
                  ORDER BY pi.is_main DESC, pi.position ASC LIMIT 1) AS image
        FROM order_details od

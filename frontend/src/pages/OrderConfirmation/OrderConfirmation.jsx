@@ -21,9 +21,9 @@ const STATUS_LABELS = {
 /**
  * OrderConfirmation
  * Ruta protegida /pedido-confirmado/:id. Muestra el pedido recién creado
- * por el checkout (RF-030). El pago en sí sigue siendo un stub de Mercado
- * Pago en el backend (ver utils/mercadoPago.js), así que el pedido queda
- * en PENDING hasta que ese webhook real se conecte más adelante.
+ * por el checkout (RF-030). Es también la back_url de success/pending de
+ * Mercado Pago (ver utils/mercadoPago.js) — el pedido pasa a PAID cuando
+ * llega el webhook real, no por nada que pase en esta página.
  */
 function OrderConfirmation() {
   const { id } = useParams();
@@ -74,8 +74,8 @@ function OrderConfirmation() {
 
         {order.status === "PENDING" && (
           <p className={styles.paymentNote}>
-            El pago todavía se procesa de forma simulada mientras se conecta Mercado Pago de
-            forma real — tu pedido y tu inventario ya quedaron reservados correctamente.
+            Tu pago está siendo confirmado por Mercado Pago — puede tardar unos segundos. Tu
+            pedido y tu inventario ya quedaron reservados correctamente.
           </p>
         )}
 

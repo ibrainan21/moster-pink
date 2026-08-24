@@ -21,8 +21,45 @@ class OrderController {
     res.status(201).json(ApiResponse.success("Pedido creado correctamente.", result));
   });
 
+  // GET /api/orders/track?orderNumber=PED-000015&email=cliente@correo.com
+  // (público, sin sesión — página /seguimiento)
+  track = asyncHandler(async (req, res) => {
+    const { orderNumber, email } = req.query;
+    const result = await OrderService.trackPublic(orderNumber, email);
+    res.json(ApiResponse.success("Pedido encontrado.", result));
+  });
+
+  // POST/GET /api/orders/webhook/mercadopago  (RF-030, ruta pública)
+  // Mercado Pago llama esto directo (sin sesión de usuario) cuando un pago
+  // cambia de estado. Solo devolvemos 200 para que MP no reintente la
+  // notificación; el procesamiento real vive en el service.
+  mercadoPagoWebhook = asyncHandler(async (req, res) => {
+    const paymentId = req.query["data.id"] || req.body?.data?.id;
+    const type = req.query.type || req.body?.type;
+
+    // Log temporal de depuración: si esto NO aparece en tu consola después
+    // de pagar, Mercado Pago no está llegando a tu backend (revisa ngrok).
+    // Si SÍ aparece, el problema está más adelante (ver logs en
+    // order.service.js -> handleMercadoPagoNotification).
+    console.log("🔔 Webhook de Mercado Pago recibido:", {
+      query: req.query,
+      body: req.body,
+      type,
+      paymentId,
+    });
+
+    if (type === "payment" && paymentId) {
+      await OrderService.handleMercadoPagoNotification(paymentId);
+    } else {
+      console.log("⚠️  Webhook ignorado: type/paymentId no reconocidos.");
+    }
+
+    res.sendStatus(200);
+  });
+
   // POST /api/orders/:id/confirm-payment
-  // (simula la confirmación de Mercado Pago; en producción la llama el webhook)
+  // (confirmación manual por un admin/empleado; el flujo real automático
+  // llega por el webhook de arriba)
   confirmPayment = asyncHandler(async (req, res) => {
     const result = await OrderService.confirmPayment(req.params.id, req.body);
     res.json(ApiResponse.success("Pago confirmado. El pedido ahora está pagado.", result));

@@ -20,6 +20,25 @@ class ReviewService {
     return ReviewRepository.listByUser(userId);
   }
 
+  // Panel administrativo: todas las reseñas, con filtros.
+  async listAll(query) {
+    const { page = 1, limit = 20, isApproved, rating, productId, search } = query;
+
+    const parsedIsApproved =
+      isApproved === undefined || isApproved === null || isApproved === ""
+        ? null
+        : isApproved === "true" || isApproved === true;
+
+    return ReviewRepository.listAll({
+      page,
+      limit,
+      isApproved: parsedIsApproved,
+      rating: rating || null,
+      productId: productId || null,
+      search: search || null,
+    });
+  }
+
   // RF-036, RN-030, RN-031
   async create(userId, { productId, orderId, rating, comment, photoUrl }) {
     const product = await ProductRepository.getById(productId);

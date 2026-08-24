@@ -2,6 +2,12 @@ import { body, param, query } from "express-validator";
 
 export const idParamValidation = [param("id").isInt({ min: 1 }).withMessage("Id inválido.")];
 
+// Seguimiento público (/seguimiento): número de pedido + correo, sin sesión.
+export const trackValidation = [
+  query("orderNumber").trim().notEmpty().withMessage("Ingresa el número de pedido."),
+  query("email").trim().isEmail().withMessage("Ingresa un correo válido.").normalizeEmail(),
+];
+
 export const listValidation = [
   query("page").optional().isInt({ min: 1 }).toInt(),
   query("limit").optional().isInt({ min: 1, max: 100 }).toInt(),

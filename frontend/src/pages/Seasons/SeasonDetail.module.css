@@ -1,0 +1,70 @@
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+  min-height: calc(100vh - 300px);
+}
+
+.state {
+  color: #888;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.notFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 60px 0;
+  color: #888;
+  text-align: center;
+}
+
+.backLink {
+  color: #ff5c93;
+  font-weight: 600;
+}
+
+.banner {
+  position: relative;
+  border-radius: 20px;
+  background-color: #ffd6e5;
+  background-size: cover;
+  background-position: center;
+  padding: 60px 40px;
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+
+.banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.05));
+}
+
+.bannerContent {
+  position: relative;
+  max-width: 560px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.description {
+  color: #fff;
+  font-size: 15px;
+  margin-top: 10px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+}

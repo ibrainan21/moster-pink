@@ -1,0 +1,288 @@
+.state {
+  color: #888;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.backLink {
+  display: inline-block;
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 16px;
+}
+
+.backLink:hover {
+  color: #ff5c93;
+}
+
+.headerRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #212121;
+}
+
+.date {
+  color: #888;
+  font-size: 13px;
+  margin-top: 4px;
+  text-transform: capitalize;
+}
+
+.badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.statusPending {
+  background: #fff3cd;
+  color: #92720c;
+}
+
+.statusPaid {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.statusPreparing {
+  background: #fde7f3;
+  color: #c2277c;
+}
+
+.statusShipped {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.statusDelivered {
+  background: #e6f7ec;
+  color: #1e8a4c;
+}
+
+.statusCancelled {
+  background: #ffe1e1;
+  color: #c0392b;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  padding: 20px 22px;
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #212121;
+  margin-bottom: 14px;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f5eef1;
+}
+
+.item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.itemImage,
+.itemImagePlaceholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: #fff5f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c9a3b3;
+  font-size: 10px;
+}
+
+.itemInfo {
+  min-width: 0;
+}
+
+.itemName {
+  font-weight: 600;
+  color: #212121;
+  font-size: 14px;
+}
+
+.itemVariant {
+  color: #888;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.itemQty {
+  color: #888;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.itemSubtotal {
+  font-weight: 700;
+  color: #ff5c93;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.reviewButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px solid #ff5c93;
+  background: #fff;
+  color: #ff5c93;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.reviewButton:hover {
+  background: #fff5f8;
+}
+
+.reviewedTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #1e8a4c;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.readOnlyRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #555;
+  padding: 6px 0;
+}
+
+.readOnlyLabel {
+  color: #888;
+}
+
+.addressName {
+  font-weight: 600;
+  color: #212121;
+  font-size: 14px;
+}
+
+.addressDetail {
+  color: #888;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.timelineRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f5eef1;
+}
+
+.timelineRow:last-child {
+  border-bottom: none;
+}
+
+.timelineStatus {
+  font-weight: 600;
+  color: #212121;
+}
+
+.timelineDate {
+  color: #888;
+  text-transform: capitalize;
+}
+
+.summary {
+  background: #fff5f8;
+  border-radius: 16px;
+  padding: 22px;
+  position: sticky;
+  top: 20px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.summaryTotal {
+  display: flex;
+  justify-content: space-between;
+  font-size: 17px;
+  font-weight: 700;
+  color: #212121;
+  border-top: 1px solid #f0d8e2;
+  padding-top: 14px;
+  margin-top: 6px;
+}
+
+.notes {
+  font-size: 12px;
+  color: #888;
+  margin-top: 14px;
+}

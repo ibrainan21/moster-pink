@@ -1,0 +1,123 @@
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #212121;
+  margin-bottom: 20px;
+}
+
+.state {
+  color: #888;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.error {
+  background: #ffe1e1;
+  color: #c0392b;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 60px 20px;
+  color: #888;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.emptyHint {
+  font-size: 13px;
+  max-width: 320px;
+}
+
+.shopLink {
+  color: #ff5c93;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  padding: 18px 20px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.productName {
+  font-weight: 600;
+  color: #212121;
+  font-size: 14px;
+}
+
+.removeButton {
+  border: none;
+  background: none;
+  color: #999;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.removeButton:hover {
+  color: #c0392b;
+}
+
+.removeButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+  margin-top: 8px;
+}
+
+.comment {
+  color: #555;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.date {
+  color: #999;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.pendingTag {
+  background: #fff3cd;
+  color: #92720c;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 10px;
+}

@@ -20,13 +20,13 @@ const NAV_ITEMS = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/admin/productos", label: "Productos", icon: Package },
   { to: "/admin/inventario", label: "Inventario", icon: Warehouse },
-  { to: "/admin/categorias", label: "Categorías", icon: FolderTree, comingSoon: true },
-  { to: "/admin/pedidos", label: "Pedidos", icon: ShoppingBag, comingSoon: true },
-  { to: "/admin/usuarios", label: "Usuarios", icon: Users, comingSoon: true },
-  { to: "/admin/resenas", label: "Reseñas", icon: Star, comingSoon: true },
-  { to: "/admin/promociones", label: "Temporadas / Promos", icon: Tag, comingSoon: true },
-  { to: "/admin/contenido", label: "Banners / Contenido", icon: Image, comingSoon: true },
-  { to: "/admin/configuracion", label: "Configuración", icon: Settings, comingSoon: true },
+  { to: "/admin/categorias", label: "Categorías", icon: FolderTree },
+  { to: "/admin/pedidos", label: "Pedidos", icon: ShoppingBag },
+  { to: "/admin/usuarios", label: "Usuarios", icon: Users },
+  { to: "/admin/resenas", label: "Reseñas", icon: Star },
+  { to: "/admin/promociones", label: "Temporadas / Promos", icon: Tag },
+  { to: "/admin/contenido", label: "Banners / Contenido", icon: Image },
+  { to: "/admin/configuracion", label: "Configuración", icon: Settings },
 ];
 
 function AdminSidebar() {

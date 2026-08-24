@@ -1,0 +1,115 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #212121;
+  margin-bottom: 16px;
+}
+
+.readOnlyRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #555;
+  padding: 10px 0;
+  border-bottom: 1px solid #f5eef1;
+}
+
+.readOnlyLabel {
+  color: #888;
+}
+
+.error {
+  background: #ffe1e1;
+  color: #c0392b;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-top: 14px;
+}
+
+.success {
+  background: #e6f7ec;
+  color: #1e8a4c;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-top: 14px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 520px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: #555;
+  font-weight: 500;
+}
+
+.field input {
+  border: 1.5px solid #f0e0e6;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #212121;
+  font-family: inherit;
+  transition: 0.2s;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #ff5c93;
+}
+
+.saveButton {
+  align-self: flex-start;
+  border: none;
+  border-radius: 24px;
+  background: #ff5c93;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.saveButton:hover {
+  background: #e6497f;
+}
+
+.saveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

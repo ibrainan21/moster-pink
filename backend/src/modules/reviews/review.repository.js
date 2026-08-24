@@ -50,6 +50,58 @@ class ReviewRepository {
     return rows;
   }
 
+  // Listado completo para moderación en el panel administrativo (incluye
+  // aprobadas y ocultas -- a diferencia de listByProduct/listRecentApproved,
+  // que son de cara al público y solo muestran las aprobadas).
+  async listAll({ page = 1, limit = 20, isApproved = null, rating = null, productId = null, search = null }) {
+    const offset = (page - 1) * limit;
+    const conditions = [];
+    const params = [];
+
+    if (isApproved !== null) {
+      conditions.push("r.is_approved = ?");
+      params.push(isApproved ? 1 : 0);
+    }
+    if (rating) {
+      conditions.push("r.rating = ?");
+      params.push(rating);
+    }
+    if (productId) {
+      conditions.push("r.product_id = ?");
+      params.push(productId);
+    }
+    if (search) {
+      conditions.push("(r.comment LIKE ? OR p.name LIKE ? OR u.first_name LIKE ? OR u.last_name LIKE ?)");
+      params.push(`%${search}%`, `%${search}%`, `%${search}%`, `%${search}%`);
+    }
+
+    const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
+
+    const [rows] = await pool.query(
+      `SELECT r.id, r.rating, r.comment, r.photo_url, r.is_approved, r.created_at,
+              p.id AS product_id, p.name AS product_name, p.slug,
+              CONCAT(u.first_name, ' ', u.last_name) AS customer_name, u.email AS customer_email
+       FROM reviews r
+       INNER JOIN products p ON r.product_id = p.id
+       INNER JOIN users u ON r.user_id = u.id
+       ${where}
+       ORDER BY r.created_at DESC
+       LIMIT ? OFFSET ?`,
+      [...params, Number(limit), Number(offset)]
+    );
+
+    const [[{ total }]] = await pool.query(
+      `SELECT COUNT(*) AS total
+       FROM reviews r
+       INNER JOIN products p ON r.product_id = p.id
+       INNER JOIN users u ON r.user_id = u.id
+       ${where}`,
+      params
+    );
+
+    return { rows, total, page: Number(page), limit: Number(limit) };
+  }
+
   async getById(id) {
     const [rows] = await pool.query(`SELECT * FROM reviews WHERE id = ? LIMIT 1`, [id]);
     return rows[0] || null;

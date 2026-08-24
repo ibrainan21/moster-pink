@@ -1,9 +1,17 @@
-import { body, param } from "express-validator";
+import { body, param, query } from "express-validator";
 
 export const idParamValidation = [param("id").isInt({ min: 1 }).withMessage("Id inválido.")];
 
 export const productIdParamValidation = [
   param("productId").isInt({ min: 1 }).withMessage("Id de producto inválido."),
+];
+
+export const listAllValidation = [
+  query("page").optional().isInt({ min: 1 }).toInt(),
+  query("limit").optional().isInt({ min: 1, max: 100 }).toInt(),
+  query("rating").optional().isInt({ min: 1, max: 5 }).toInt(),
+  query("isApproved").optional().isBoolean(),
+  query("productId").optional().isInt({ min: 1 }),
 ];
 
 export const createReviewValidation = [

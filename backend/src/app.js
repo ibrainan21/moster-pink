@@ -18,6 +18,9 @@ import reviewRoutes from "./modules/reviews/review.routes.js";
 import promotionRoutes from "./modules/promotions/promotion.routes.js";
 import contentRoutes from "./modules/content/content.routes.js";
 import aiRoutes from "./modules/ai/ai.routes.js";
+import dashboardRoutes from "./modules/dashboard/dashboard.routes.js";
+import settingsRoutes from "./modules/settings/settings.routes.js";
+import contactRoutes from "./modules/contact/contact.routes.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import ApiError from "./utils/ApiError.js";
 
@@ -57,6 +60,9 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/promotions", promotionRoutes);
 app.use("/api/content", contentRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/settings", settingsRoutes);
+app.use("/api/contact", contactRoutes);
 
 // Cualquier ruta no reconocida.
 app.use((req, res, next) => {

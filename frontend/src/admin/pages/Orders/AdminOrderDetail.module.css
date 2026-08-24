@@ -1,0 +1,285 @@
+.page {
+  max-width: 1100px;
+}
+
+.backLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: none;
+  color: #888;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 14px;
+  padding: 0;
+}
+
+.backLink:hover {
+  color: #ff5c93;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #212121;
+}
+
+.customer {
+  color: #888;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.error {
+  background: #ffe1e1;
+  color: #c0392b;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+}
+
+.state {
+  color: #888;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.main,
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.card h2 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #212121;
+  margin-bottom: 12px;
+}
+
+.statusBadge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 12px;
+  white-space: nowrap;
+  height: fit-content;
+}
+
+.statusPending {
+  background: #fff4d6;
+  color: #b8860b;
+}
+
+.statusPaid {
+  background: #e0f0ff;
+  color: #1a6fb8;
+}
+
+.statusPreparing {
+  background: #f0e6ff;
+  color: #7a3fc2;
+}
+
+.statusShipped {
+  background: #e6f0ff;
+  color: #3355cc;
+}
+
+.statusDelivered {
+  background: #e5f7ec;
+  color: #1a9c56;
+}
+
+.statusCancelled {
+  background: #f2f2f2;
+  color: #888;
+}
+
+.itemsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.itemsTable th {
+  text-align: left;
+  color: #888;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 8px 10px;
+  border-bottom: 1px solid #f0e0e6;
+}
+
+.itemsTable td {
+  padding: 10px;
+  border-bottom: 1px solid #f6ecf0;
+  vertical-align: middle;
+}
+
+.thumb,
+.thumbPlaceholder {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #fff5f8;
+}
+
+.productName {
+  font-weight: 600;
+  color: #212121;
+}
+
+.muted {
+  color: #888;
+  font-size: 12px;
+}
+
+.totals {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 260px;
+  margin-left: auto;
+  font-size: 13px;
+}
+
+.totals > div {
+  display: flex;
+  justify-content: space-between;
+  color: #666;
+}
+
+.totalRow {
+  border-top: 1px solid #f0e0e6;
+  padding-top: 6px;
+  margin-top: 4px;
+  font-weight: 700;
+  color: #212121;
+  font-size: 15px;
+}
+
+.notes {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #555;
+  background: #fff9fb;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.timeline li {
+  border-left: 2px solid #f0e0e6;
+  padding-left: 12px;
+}
+
+.timelineDate {
+  color: #999;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.statusChanger {
+  display: flex;
+  gap: 8px;
+}
+
+.statusChanger select {
+  flex: 1;
+  border: 1.5px solid #f0e0e6;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.saveButton {
+  border: none;
+  background: #ff5c93;
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 10px;
+  padding: 9px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.saveButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.inlineForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.inlineFormRow {
+  display: flex;
+  gap: 8px;
+}
+
+.inlineForm input,
+.inlineForm select {
+  border: 1.5px solid #f0e0e6;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  flex: 1;
+}
+
+.hint {
+  font-size: 12px;
+  color: #888;
+}
+
+.shipmentInfo {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 10px;
+}

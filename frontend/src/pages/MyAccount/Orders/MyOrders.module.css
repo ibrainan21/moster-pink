@@ -1,0 +1,153 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #212121;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filterButton {
+  border: 1.5px solid #f0e0e6;
+  background: #fff;
+  color: #555;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.filterButton:hover {
+  border-color: #ff5c93;
+  color: #ff5c93;
+}
+
+.filterActive {
+  background: #ff5c93;
+  border-color: #ff5c93;
+  color: #fff;
+}
+
+.filterActive:hover {
+  color: #fff;
+}
+
+.state {
+  color: #888;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 60px 0;
+  color: #888;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.shopLink {
+  color: #ff5c93;
+  font-weight: 600;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px 20px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  color: inherit;
+  transition: 0.15s;
+}
+
+.row:hover {
+  box-shadow: 0 6px 18px rgba(255, 92, 147, 0.15);
+}
+
+.rowMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.orderNumber {
+  font-weight: 700;
+  color: #212121;
+  font-size: 15px;
+}
+
+.orderDate {
+  color: #888;
+  font-size: 13px;
+  margin-top: 2px;
+  text-transform: capitalize;
+}
+
+.orderTotal {
+  font-weight: 700;
+  color: #ff5c93;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.statusPending {
+  background: #fff3cd;
+  color: #92720c;
+}
+
+.statusPaid {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.statusPreparing {
+  background: #fde7f3;
+  color: #c2277c;
+}
+
+.statusShipped {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.statusDelivered {
+  background: #e6f7ec;
+  color: #1e8a4c;
+}
+
+.statusCancelled {
+  background: #ffe1e1;
+  color: #c0392b;
+}

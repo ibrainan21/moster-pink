@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "../pages/Home/Home";
 import Products from "../pages/Products/Products";
@@ -10,13 +10,34 @@ import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 import ComingSoon from "../pages/ComingSoon/ComingSoon";
+import Contact from "../pages/Contact/Contact";
+import FAQ from "../pages/FAQ/FAQ";
+import OrderTracking from "../pages/OrderTracking/OrderTracking";
 import NotFound from "../pages/NotFound/NotFound";
 import ProtectedRoute from "./ProtectedRoute";
+import MyAccountLayout from "../pages/MyAccount/MyAccountLayout";
+import Profile from "../pages/MyAccount/Profile/Profile";
+import MyOrders from "../pages/MyAccount/Orders/MyOrders";
+import MyOrderDetail from "../pages/MyAccount/Orders/MyOrderDetail";
+import MyAddresses from "../pages/MyAccount/Addresses/MyAddresses";
+import MyFavorites from "../pages/MyAccount/Favorites/MyFavorites";
+import MyReviews from "../pages/MyAccount/Reviews/MyReviews";
+import SeasonsList from "../pages/Seasons/SeasonsList";
+import SeasonDetail from "../pages/Seasons/SeasonDetail";
 import AdminRoute from "../admin/AdminRoute";
 import AdminLayout from "../admin/layout/AdminLayout";
 import AdminProducts from "../admin/pages/Products/AdminProducts";
 import ProductForm from "../admin/pages/Products/ProductForm";
 import AdminInventory from "../admin/pages/Inventory/AdminInventory";
+import AdminCategories from "../admin/pages/Categories/AdminCategories";
+import AdminOrders from "../admin/pages/Orders/AdminOrders";
+import AdminOrderDetail from "../admin/pages/Orders/AdminOrderDetail";
+import AdminUsers from "../admin/pages/Users/AdminUsers";
+import AdminReviews from "../admin/pages/Reviews/AdminReviews";
+import AdminPromotions from "../admin/pages/Promotions/AdminPromotions";
+import AdminContent from "../admin/pages/Content/AdminContent";
+import AdminDashboard from "../admin/pages/Dashboard/AdminDashboard";
+import AdminSettings from "../admin/pages/Settings/AdminSettings";
 
 /**
  * AppRouter
@@ -38,16 +59,35 @@ function AppRouter() {
       <Route path="/productos" element={<Products />} />
       <Route path="/productos/:slug" element={<ProductDetail />} />
       <Route path="/categorias/:slug" element={<Products />} />
-      <Route path="/temporadas" element={<ComingSoon title="Las temporadas" />} />
-      <Route path="/temporadas/:slug" element={<ComingSoon title="Esta temporada" />} />
+      <Route path="/temporadas" element={<SeasonsList />} />
+      <Route path="/temporadas/:slug" element={<SeasonDetail />} />
       <Route path="/personalizados" element={<ComingSoon title="Los regalos personalizados" />} />
 
       {/* Cuenta / carrito */}
       <Route path="/login" element={<Login />} />
       <Route path="/registro" element={<Register />} />
       <Route path="/recuperar-contrasena" element={<ForgotPassword />} />
-      <Route path="/mi-cuenta" element={<ComingSoon title="Mi cuenta" />} />
-      <Route path="/favoritos" element={<ComingSoon title="Tus favoritos" />} />
+
+      {/* Mi cuenta (RF-032 a RF-037): perfil, pedidos, direcciones,
+          favoritos y opiniones, todo detrás de sesión iniciada. /favoritos
+          queda como alias corto desde el ícono del Header. */}
+      <Route
+        path="/mi-cuenta"
+        element={
+          <ProtectedRoute>
+            <MyAccountLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Navigate to="perfil" replace />} />
+        <Route path="perfil" element={<Profile />} />
+        <Route path="pedidos" element={<MyOrders />} />
+        <Route path="pedidos/:id" element={<MyOrderDetail />} />
+        <Route path="direcciones" element={<MyAddresses />} />
+        <Route path="favoritos" element={<MyFavorites />} />
+        <Route path="resenas" element={<MyReviews />} />
+      </Route>
+      <Route path="/favoritos" element={<Navigate to="/mi-cuenta/favoritos" replace />} />
       <Route
         path="/carrito"
         element={
@@ -74,24 +114,19 @@ function AppRouter() {
       />
 
       {/* Información / ayuda */}
-      <Route path="/contacto" element={<ComingSoon title="La página de contacto" />} />
-      <Route
-        path="/preguntas-frecuentes"
-        element={<ComingSoon title="Las preguntas frecuentes" />}
-      />
+      <Route path="/contacto" element={<Contact />} />
+      <Route path="/preguntas-frecuentes" element={<FAQ />} />
       <Route path="/envios" element={<ComingSoon title="La información de envíos" />} />
       <Route
         path="/cambios-devoluciones"
         element={<ComingSoon title="Cambios y devoluciones" />}
       />
-      <Route path="/seguimiento" element={<ComingSoon title="El seguimiento de pedido" />} />
+      <Route path="/seguimiento" element={<OrderTracking />} />
 
       {/*
-        Panel administrativo (Fase 1: Productos, Variantes, Inventario).
-        Las secciones que todavía no tienen backend propio (Dashboard real,
+        Panel administrativo completo: Productos, Variantes, Inventario,
         Categorías, Pedidos, Usuarios, Reseñas, Promociones, Contenido,
-        Configuración) quedan como ComingSoon — se reemplazan una por una
-        en las siguientes fases, igual que el resto del sitio.
+        Dashboard y Configuración ya tienen backend y pantalla propios.
       */}
       <Route
         path="/admin"
@@ -101,24 +136,19 @@ function AppRouter() {
           </AdminRoute>
         }
       >
-        <Route index element={<ComingSoon title="El dashboard administrativo" />} />
+        <Route index element={<AdminDashboard />} />
         <Route path="productos" element={<AdminProducts />} />
         <Route path="productos/nuevo" element={<ProductForm />} />
         <Route path="productos/:id/editar" element={<ProductForm />} />
         <Route path="inventario" element={<AdminInventory />} />
-        <Route path="categorias" element={<ComingSoon title="Categorías y subcategorías" />} />
-        <Route path="pedidos" element={<ComingSoon title="La gestión de pedidos" />} />
-        <Route path="usuarios" element={<ComingSoon title="Usuarios y clientes" />} />
-        <Route path="resenas" element={<ComingSoon title="La moderación de reseñas" />} />
-        <Route
-          path="promociones"
-          element={<ComingSoon title="Temporadas, promociones y cupones" />}
-        />
-        <Route path="contenido" element={<ComingSoon title="Banners, galería y redes" />} />
-        <Route
-          path="configuracion"
-          element={<ComingSoon title="La configuración de la tienda" />}
-        />
+        <Route path="categorias" element={<AdminCategories />} />
+        <Route path="pedidos" element={<AdminOrders />} />
+        <Route path="pedidos/:id" element={<AdminOrderDetail />} />
+        <Route path="usuarios" element={<AdminUsers />} />
+        <Route path="resenas" element={<AdminReviews />} />
+        <Route path="promociones" element={<AdminPromotions />} />
+        <Route path="contenido" element={<AdminContent />} />
+        <Route path="configuracion" element={<AdminSettings />} />
       </Route>
 
       {/* Cualquier otra ruta */}

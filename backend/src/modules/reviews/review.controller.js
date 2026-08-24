@@ -21,6 +21,12 @@ class ReviewController {
     res.json(ApiResponse.success("Tus opiniones obtenidas correctamente.", reviews));
   });
 
+  // GET /api/reviews  (panel administrativo, moderación)
+  listAll = asyncHandler(async (req, res) => {
+    const result = await ReviewService.listAll(req.query);
+    res.json(ApiResponse.success("Reseñas obtenidas correctamente.", result));
+  });
+
   // POST /api/reviews  (RF-036, CU-010)
   create = asyncHandler(async (req, res) => {
     const review = await ReviewService.create(req.user.id, req.body);

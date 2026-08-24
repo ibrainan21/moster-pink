@@ -4,6 +4,8 @@ import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import { useCart } from "../../context/CartContext";
+import useFetch from "../../hooks/useFetch";
+import settingsService from "../../services/settings.service";
 import styles from "./Cart.module.css";
 
 const formatPrice = (value) =>
@@ -21,6 +23,23 @@ function Cart() {
   const { cart, loading, ensureLoaded, updateQuantity, removeItem, clear } = useCart();
   const [busyItemId, setBusyItemId] = useState(null);
   const [error, setError] = useState("");
+
+  // RF-030: estimación de envío e impuesto ANTES del checkout, usando la
+  // configuración real que el admin gestiona en /admin/configuracion (ver
+  // settings.service.js -- este endpoint es público, no requiere sesión
+  // de Administrador). Si falla, se degrada a "solo productos" sin tronar
+  // el carrito.
+  const { data: shippingConfig, loading: loadingShipping } = useFetch(
+    (signal) => settingsService.getShippingConfig(signal),
+    []
+  );
+
+  const shippingCost =
+    shippingConfig && shippingConfig.freeShippingThreshold > 0 && cart.total >= shippingConfig.freeShippingThreshold
+      ? 0
+      : shippingConfig?.shippingCost ?? 0;
+  const taxAmount = shippingConfig ? cart.total * (shippingConfig.taxRate / 100) : 0;
+  const estimatedTotal = cart.total + shippingCost + taxAmount;
 
   useEffect(() => {
     ensureLoaded();
@@ -162,10 +181,28 @@ function Cart() {
                 <span>Productos ({cart.itemCount})</span>
                 <span>{formatPrice(cart.total)}</span>
               </div>
-              <p className={styles.summaryNote}>El costo de envío se calcula en el pago.</p>
+              <div className={styles.summaryRow}>
+                <span>Envío</span>
+                <span>
+                  {loadingShipping
+                    ? "Calculando..."
+                    : shippingCost === 0
+                    ? "Gratis"
+                    : formatPrice(shippingCost)}
+                </span>
+              </div>
+              <div className={styles.summaryRow}>
+                <span>Impuestos</span>
+                <span>{loadingShipping ? "Calculando..." : formatPrice(taxAmount)}</span>
+              </div>
+              {shippingConfig?.freeShippingThreshold > 0 && shippingCost > 0 && (
+                <p className={styles.summaryNote}>
+                  Envío gratis en compras desde {formatPrice(shippingConfig.freeShippingThreshold)}.
+                </p>
+              )}
               <div className={styles.summaryTotal}>
-                <span>Total</span>
-                <span>{formatPrice(cart.total)}</span>
+                <span>Total estimado</span>
+                <span>{loadingShipping ? "Calculando..." : formatPrice(estimatedTotal)}</span>
               </div>
 
               <button

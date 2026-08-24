@@ -3,7 +3,9 @@ import OrderRepository from "./order.repository.js";
 import CartRepository from "../cart/cart.repository.js";
 import CouponService from "../promotions/coupon.service.js";
 import RecommendationService from "../ai/recommendation.service.js";
-import { createMercadoPagoPreference } from "../../utils/mercadoPago.js";
+import SettingsService from "../settings/settings.service.js";
+import { createMercadoPagoPreference, getMercadoPagoPayment } from "../../utils/mercadoPago.js";
+import { sendOrderConfirmationEmail } from "../../utils/mailer.js";
 
 // RN-028: flujo de estados permitido. Esto es una segunda barrera (defensa
 // en profundidad) además del trigger trg_orders_bu que ya vive en la base
@@ -34,6 +36,44 @@ class OrderService {
     const order = await OrderRepository.getById(id);
     if (!order) throw new ApiError(404, "Pedido no encontrado.");
     return this.getFullOrder(order);
+  }
+
+  // Seguimiento público (/seguimiento, sin sesión iniciada). Solo expone
+  // lo mínimo necesario para que el cliente vea en qué va su pedido —
+  // nunca pagos, notas internas, ni datos de otros usuarios. Requiere
+  // acertar número de pedido + correo juntos (ver repository).
+  async trackPublic(orderNumber, email) {
+    const order = await OrderRepository.getByOrderNumberAndEmail(orderNumber, email);
+    if (!order) {
+      throw new ApiError(404, "No encontramos un pedido con ese número y correo.");
+    }
+
+    const [details, shipment, statusHistory] = await Promise.all([
+      OrderRepository.getDetails(order.id),
+      OrderRepository.getShipment(order.id),
+      OrderRepository.getStatusHistory(order.id),
+    ]);
+
+    return {
+      orderNumber: order.order_number,
+      status: order.status,
+      orderDate: order.order_date,
+      total: order.total,
+      items: details.map((d) => ({
+        productName: d.product_name,
+        quantity: d.quantity,
+        color: d.color,
+        size: d.size,
+      })),
+      shipment: shipment
+        ? {
+            carrier: shipment.carrier,
+            trackingNumber: shipment.tracking_number,
+            status: shipment.shipping_status,
+          }
+        : null,
+      statusHistory: statusHistory.map((h) => ({ status: h.status, date: h.created_at })),
+    };
   }
 
   // Un cliente solo puede ver sus propios pedidos; Admin/Empleado ven todos.
@@ -99,6 +139,14 @@ class OrderService {
       discount = couponDiscount;
     }
 
+    // Envío e impuesto salen de Configuración (RF-044) en vez de estar
+    // fijos en 0: si el subtotal llega al umbral de envío gratis, el
+    // envío se cae a 0 aunque haya un costo configurado.
+    const { shippingCost: configuredShipping, freeShippingThreshold, taxRate } =
+      await SettingsService.getShippingAndTaxConfig();
+    const shippingCost =
+      freeShippingThreshold > 0 && subtotal >= freeShippingThreshold ? 0 : configuredShipping;
+
     let orderId;
     try {
       orderId = await OrderRepository.create({
@@ -106,6 +154,8 @@ class OrderService {
         addressId,
         warehouseId,
         lines,
+        shippingCost,
+        taxRate,
         discount,
         couponId,
         notes,
@@ -143,8 +193,9 @@ class OrderService {
   }
 
   // RN-027: el pedido solo pasa a "Pagado" cuando el proveedor de pago
-  // confirma la transacción (aquí simulado; en producción esto lo dispara
-  // el webhook de Mercado Pago llamando a confirmPayment).
+  // confirma la transacción. Esto lo puede disparar un admin manualmente
+  // (confirm-payment) o, en el flujo real, el webhook de Mercado Pago
+  // (ver handleMercadoPagoNotification más abajo).
   async confirmPayment(orderId, { paymentMethod, amount, reference }) {
     const order = await OrderRepository.getById(orderId);
     if (!order) throw new ApiError(404, "Pedido no encontrado.");
@@ -161,7 +212,62 @@ class OrderService {
     });
 
     const updated = await this.updateStatus(orderId, "PAID", { id: null });
+
+    // Correo de confirmación: "mejor esfuerzo", igual que las
+    // recomendaciones de IA más abajo — nunca debe tumbar la confirmación
+    // del pago si el envío de correo falla.
+    sendOrderConfirmationEmail(updated.customer_email, updated).catch((err) =>
+      console.error("No se pudo enviar el correo de confirmación de pedido:", err.message)
+    );
+
     return { payment, order: updated };
+  }
+
+  // RF-030: procesa la notificación (webhook) real de Mercado Pago.
+  // Nunca confiamos en el monto/estado que venga en el payload de la
+  // notificación: siempre se vuelve a consultar el pago directo contra la
+  // API de Mercado Pago antes de marcar algo como pagado (evita que una
+  // notificación falsa o alterada confirme un pedido).
+  async handleMercadoPagoNotification(paymentId) {
+    const payment = await getMercadoPagoPayment(paymentId);
+    if (!payment) {
+      console.log(`⚠️  MP notification: no se pudo consultar el pago ${paymentId} (¿MP_ACCESS_TOKEN correcto?).`);
+      return;
+    }
+
+    console.log(
+      `🔎 MP notification: pago ${paymentId} -> status=${payment.status}, external_reference=${payment.external_reference}, monto=${payment.transaction_amount}`
+    );
+
+    const orderId = Number(payment.external_reference);
+    if (!orderId) {
+      console.log(`⚠️  MP notification: external_reference inválido (${payment.external_reference}).`);
+      return;
+    }
+
+    const order = await OrderRepository.getById(orderId);
+    // Si el pedido no existe, o ya no está PENDING (ya fue confirmado o
+    // cancelado), no hay nada que hacer: evita procesar la misma
+    // notificación dos veces (MP puede reenviarla).
+    if (!order) {
+      console.log(`⚠️  MP notification: pedido #${orderId} no existe en la base de datos.`);
+      return;
+    }
+    if (order.status !== "PENDING") {
+      console.log(`ℹ️  MP notification: pedido #${orderId} ya está en estado ${order.status}, se ignora.`);
+      return;
+    }
+
+    if (payment.status === "approved") {
+      await this.confirmPayment(orderId, {
+        paymentMethod: "MERCADO_PAGO",
+        amount: payment.transaction_amount,
+        reference: String(payment.id),
+      });
+      console.log(`✅ MP notification: pedido #${orderId} confirmado como PAGADO.`);
+    } else {
+      console.log(`ℹ️  MP notification: pago con status "${payment.status}", pedido #${orderId} sigue pendiente.`);
+    }
   }
 
   // RF-031, RN-028: cambio de estado con transición validada.

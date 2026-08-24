@@ -1,4 +1,6 @@
-import { Heart, ShoppingCart } from "lucide-react";
+import { Heart, ShoppingCart, Star } from "lucide-react";
+import useFetch from "../../hooks/useFetch";
+import reviewService from "../../services/review.service";
 import styles from "./ProductCard.module.css";
 
 // Formatea números como precio en pesos mexicanos, ej. 399 -> "$399.00"
@@ -16,7 +18,17 @@ const formatPrice = (value) =>
  * pasan, el botón simplemente no hace nada visible más allá del feedback.
  */
 function ProductCard({ product, onAddToCart, onToggleFavorite, onClick }) {
-  const { name, price, is_new: isNew, is_featured: isFeatured, main_image: image } = product;
+  const { id, name, price, is_new: isNew, is_featured: isFeatured, main_image: image } = product;
+
+  // GET /api/reviews/product/:id (público, ya existía en el backend).
+  // Si falla o el producto todavía no tiene reseñas aprobadas, simplemente
+  // no se muestra nada de calificación — nunca se inventa un promedio.
+  const { data: reviewsData } = useFetch(
+    (signal) => reviewService.listByProduct(id, signal),
+    [id]
+  );
+  const reviewCount = Number(reviewsData?.summary?.total || 0);
+  const reviewAverage = Number(reviewsData?.summary?.average || 0);
 
   return (
     <div
@@ -53,9 +65,13 @@ function ProductCard({ product, onAddToCart, onToggleFavorite, onClick }) {
       <div className={styles.info}>
         <h3 className={styles.name}>{name}</h3>
 
-        {/* TODO: conectar con GET /api/reviews/product/:id (ya existe en el
-            backend, con promedio y total) cuando se agregue esa llamada
-            aquí. Por ahora no se muestra una calificación inventada. */}
+        {reviewCount > 0 && (
+          <div className={styles.rating}>
+            <Star size={14} className={styles.starIcon} />
+            <span>{reviewAverage.toFixed(1)}</span>
+            <span className={styles.ratingCount}>({reviewCount})</span>
+          </div>
+        )}
 
         <p className={styles.price}>{formatPrice(price)}</p>
 
