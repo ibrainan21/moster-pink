@@ -182,7 +182,7 @@ class OrderService {
       cart.map((item) => item.product_id)
     );
 
-    // RF-030: generar la preferencia de pago con Mercado Pago (stub por ahora).
+    // RF-030: generar la preferencia de pago con Mercado Pago.
     const preference = await createMercadoPagoPreference({
       orderId,
       amount: order.total,
@@ -265,6 +265,15 @@ class OrderService {
         reference: String(payment.id),
       });
       console.log(`✅ MP notification: pedido #${orderId} confirmado como PAGADO.`);
+    } else if (["rejected", "cancelled"].includes(payment.status)) {
+      // El pago no se completó (tarjeta rechazada, o el cliente canceló el
+      // checkout de Mercado Pago antes de terminar): cancelamos el pedido
+      // para que trg_orders_bu (base de datos) restaure automáticamente el
+      // inventario que se había reservado al crear el pedido.
+      await this.updateStatus(orderId, "CANCELLED", { id: null });
+      console.log(
+        `❌ MP notification: pago "${payment.status}", pedido #${orderId} cancelado e inventario restaurado.`
+      );
     } else {
       console.log(`ℹ️  MP notification: pago con status "${payment.status}", pedido #${orderId} sigue pendiente.`);
     }
