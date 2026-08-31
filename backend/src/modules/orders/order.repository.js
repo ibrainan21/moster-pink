@@ -28,7 +28,7 @@ class OrderRepository {
   // Si se manda couponId, el uso del cupón (coupon_usage + used_count) se
   // registra en la MISMA transacción: o se crean el pedido y el uso del
   // cupón juntos, o no se crea ninguno de los dos.
-  async create({ userId, addressId, warehouseId, lines, shippingCost = 0, taxRate = 0, discount = 0, notes, createdBy = null, couponId = null }) {
+  async create({ userId, addressId, warehouseId, lines, shippingCost = 0, taxRate = 0, discount = 0, notes, createdBy = null, couponId = null, deliveryMethod = "SHIPPING" }) {
     const connection = await pool.getConnection();
 
     try {
@@ -46,9 +46,9 @@ class OrderRepository {
       const [orderResult] = await connection.query(
         `INSERT INTO orders
            (user_id, address_id, order_number, order_date, status,
-            subtotal, discount, shipping_cost, tax, total, notes, created_by)
-         VALUES (?, ?, ?, NOW(), 'PENDING', ?, ?, ?, ?, ?, ?, ?)`,
-        [userId, addressId || null, orderNumber, subtotal, discount, shippingCost, tax, total, notes || null, createdBy]
+            subtotal, discount, shipping_cost, tax, total, notes, created_by, delivery_method)
+         VALUES (?, ?, ?, NOW(), 'PENDING', ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [userId, addressId || null, orderNumber, subtotal, discount, shippingCost, tax, total, notes || null, createdBy, deliveryMethod]
       );
 
       const orderId = orderResult.insertId;
@@ -108,7 +108,7 @@ class OrderRepository {
     const where = `WHERE ${conditions.join(" AND ")}`;
 
     const [rows] = await pool.query(
-      `SELECT o.id, o.order_number, o.order_date, o.status, o.total,
+      `SELECT o.id, o.order_number, o.order_date, o.status, o.total, o.delivery_method,
               CONCAT(u.first_name, ' ', u.last_name) AS customer_name
        FROM orders o
        INNER JOIN users u ON o.user_id = u.id

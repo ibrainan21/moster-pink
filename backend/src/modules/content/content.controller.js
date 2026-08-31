@@ -1,11 +1,24 @@
 import asyncHandler from "../../utils/asyncHandler.js";
 import ApiResponse from "../../utils/ApiResponse.js";
+import ApiError from "../../utils/ApiError.js";
 import BannerService from "./banner.service.js";
 import GalleryService from "./gallery.service.js";
 import SocialService from "./social.service.js";
 import CompanyService from "./company.service.js";
+import { uploadBufferToCloudinary } from "../../utils/cloudinaryUpload.js";
 
 class ContentController {
+  // POST /api/content/upload-image (multipart/form-data, campo "image").
+  // Endpoint genérico de subida a Cloudinary: lo usan Categorías, Banners,
+  // Galería y "Conócenos" cuando el admin sube un archivo en vez de pegar
+  // una URL. Reutiliza el mismo middleware/uploader que ya usan los
+  // productos (backend/src/middlewares/upload.middleware.js).
+  uploadImage = asyncHandler(async (req, res) => {
+    if (!req.file) throw new ApiError(400, "No se recibió ninguna imagen.");
+    const result = await uploadBufferToCloudinary(req.file.buffer, "moster-pink/content");
+    res.status(201).json(ApiResponse.success("Imagen subida correctamente.", { imageUrl: result.secure_url }));
+  });
+
   // --- Banners (RF-039, RF-040) ---
 
   listBanners = asyncHandler(async (req, res) => {

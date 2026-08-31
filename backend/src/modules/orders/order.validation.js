@@ -17,7 +17,13 @@ export const listValidation = [
 ];
 
 export const checkoutValidation = [
-  body("addressId").optional({ nullable: true }).isInt({ min: 1 }),
+  body("deliveryMethod").optional().isIn(["SHIPPING", "PICKUP"]).withMessage("Modalidad de entrega inválida."),
+  body("addressId")
+    .if(body("deliveryMethod").not().equals("PICKUP"))
+    .notEmpty()
+    .withMessage("La dirección de envío es obligatoria.")
+    .bail()
+    .isInt({ min: 1 }),
   body("notes").optional({ nullable: true }).isString(),
   body("couponCode").optional({ nullable: true }).isString(),
 ];

@@ -70,4 +70,5 @@ export const saveCompanyValidation = [
   body("website").optional({ nullable: true }).isString(),
   body("address").optional({ nullable: true }).isString(),
   body("logoUrl").optional({ nullable: true }).isString(),
+  body("about").optional({ nullable: true }).isString().isLength({ max: 2000 }),
 ];

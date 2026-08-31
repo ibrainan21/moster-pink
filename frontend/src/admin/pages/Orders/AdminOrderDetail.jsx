@@ -64,9 +64,14 @@ function AdminOrderDetail() {
             {order.customer_name} · {order.customer_email}
           </p>
         </div>
-        <span className={`${styles.statusBadge} ${styles[STATUS_CLASS[order.status]]}`}>
-          {STATUS_LABELS[order.status] || order.status}
-        </span>
+        <div className={styles.headerBadges}>
+          <span className={`${styles.statusBadge} ${styles[STATUS_CLASS[order.status]]}`}>
+            {STATUS_LABELS[order.status] || order.status}
+          </span>
+          <span className={styles.deliveryBadge}>
+            {order.delivery_method === "PICKUP" ? "🏬 Recoger en tienda" : "🚚 Envío a domicilio"}
+          </span>
+        </div>
       </div>
 
       {actionError && <p className={styles.error}>{actionError}</p>}

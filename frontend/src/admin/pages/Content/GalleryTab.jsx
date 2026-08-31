@@ -2,14 +2,15 @@ import { useState } from "react";
 import { Plus, Pencil, Trash2, Power, X } from "lucide-react";
 import useFetch from "../../../hooks/useFetch";
 import contentService from "../../../services/content.service";
+import ImageUploadField from "../../../components/ImageUploadField/ImageUploadField";
 import styles from "./AdminContent.module.css";
 
 /**
  * GalleryTab
- * Administra la galería que alimenta "Síguenos en Instagram" en el Home
- * (components/InstagramGallery). `category` es texto libre (no hay un
- * catálogo fijo en el backend) para poder reutilizar la galería en otros
- * bloques del sitio más adelante si hace falta.
+ * Administra la galería que alimenta "Síguenos en Instagram" y también la
+ * sección "Conócenos" (components/AboutUs) en el Home. `category` es texto
+ * libre: usa "conocenos" para que una foto aparezca en Conócenos, o
+ * déjalo vacío/otro valor para que solo aparezca en Instagram.
  */
 function GalleryTab() {
   const [reloadToken, setReloadToken] = useState(0);
@@ -179,16 +180,13 @@ function GalleryModal({ item, onClose, onSuccess }) {
         <form onSubmit={handleSubmit}>
           {error && <p className={styles.error}>{error}</p>}
 
-          <div className={styles.modalField}>
-            <label>URL de la imagen</label>
-            <input
-              type="text"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              autoFocus
-            />
-            {imageUrl && <img src={imageUrl} alt="" className={styles.preview} />}
-          </div>
+          <ImageUploadField
+            label="Imagen"
+            value={imageUrl}
+            onChange={setImageUrl}
+            previewClassName={styles.preview}
+            autoFocus
+          />
 
           <div className={styles.modalField}>
             <label>Título (opcional)</label>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useFetch from "../../../hooks/useFetch";
 import contentService from "../../../services/content.service";
+import ImageUploadField from "../../../components/ImageUploadField/ImageUploadField";
 import styles from "./AdminContent.module.css";
 
 /**
@@ -33,6 +34,7 @@ function CompanyForm({ company }) {
     website: company?.website || "",
     address: company?.address || "",
     logoUrl: company?.logo_url || "",
+    about: company?.about || "",
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -123,14 +125,21 @@ function CompanyForm({ company }) {
         />
       </div>
 
+      <ImageUploadField
+        label="URL del logo (opcional)"
+        value={form.logoUrl}
+        onChange={(v) => handleChange("logoUrl", v)}
+        previewClassName={styles.preview}
+      />
+
       <div className={styles.modalField}>
-        <label>URL del logo (opcional)</label>
-        <input
-          type="text"
-          value={form.logoUrl}
-          onChange={(e) => handleChange("logoUrl", e.target.value)}
+        <label>Descripción de la empresa (para la sección "Conócenos" del Home)</label>
+        <textarea
+          rows={4}
+          value={form.about}
+          onChange={(e) => handleChange("about", e.target.value)}
+          placeholder="Monster Pink es una tienda dedicada a regalos y detalles..."
         />
-        {form.logoUrl && <img src={form.logoUrl} alt="" className={styles.preview} />}
       </div>
 
       <button type="submit" className={styles.saveButton} disabled={saving}>

@@ -94,6 +94,40 @@
   accent-color: #ff5c93;
 }
 
+.deliveryOptions {
+  display: flex;
+  gap: 12px;
+}
+
+.deliveryOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  border: 1.5px solid #f0e0e6;
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  color: #444;
+  transition: 0.2s;
+}
+
+.deliveryOption:hover {
+  border-color: #f5b8cd;
+}
+
+.deliveryOptionActive {
+  border-color: #ff5c93;
+  background: #fff5f8;
+  color: #ff5c93;
+}
+
+.deliveryOption input {
+  accent-color: #ff5c93;
+}
+
 .addressName {
   font-weight: 600;
   font-size: 14px;

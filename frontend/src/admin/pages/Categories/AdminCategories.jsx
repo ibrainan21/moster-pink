@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Plus, Pencil, Trash2, Power, ChevronDown, ChevronRight, X } from "lucide-react";
 import useFetch from "../../../hooks/useFetch";
 import categoryService from "../../../services/category.service";
+import ImageUploadField from "../../../components/ImageUploadField/ImageUploadField";
 import styles from "./AdminCategories.module.css";
 
 /**
@@ -373,10 +374,7 @@ function CategoryModal({ category, onClose, onSuccess }) {
             />
           </div>
 
-          <div className={styles.modalField}>
-            <label>URL de imagen</label>
-            <input type="text" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
-          </div>
+          <ImageUploadField label="Imagen" value={imageUrl} onChange={setImageUrl} previewClassName={styles.preview} />
 
           <div className={styles.modalField}>
             <label>Orden</label>

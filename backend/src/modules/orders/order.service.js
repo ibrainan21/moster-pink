@@ -106,7 +106,7 @@ class OrderService {
   // usos, compra mínima) contra el subtotal real del carrito ANTES de
   // crear el pedido; el registro de uso (coupon_usage) se hace dentro de
   // la misma transacción que el pedido, en OrderRepository.create.
-  async checkoutFromCart(userId, { addressId, notes, couponCode }) {
+  async checkoutFromCart(userId, { addressId, notes, couponCode, deliveryMethod = "SHIPPING" }) {
     const cart = await CartRepository.getByUser(userId);
     if (!cart.length) throw new ApiError(400, "Tu carrito está vacío.");
 
@@ -144,14 +144,27 @@ class OrderService {
     // envío se cae a 0 aunque haya un costo configurado.
     const { shippingCost: configuredShipping, freeShippingThreshold, taxRate } =
       await SettingsService.getShippingAndTaxConfig();
-    const shippingCost =
-      freeShippingThreshold > 0 && subtotal >= freeShippingThreshold ? 0 : configuredShipping;
+
+    // El costo de envío y la exigencia de dirección se deciden aquí, en el
+    // backend, sin importar qué haya mostrado el frontend: si el cliente
+    // elige "recoger en tienda" el envío siempre es $0 y no se guarda
+    // dirección, aunque manipule la petición.
+    const isPickup = deliveryMethod === "PICKUP";
+    const shippingCost = isPickup
+      ? 0
+      : freeShippingThreshold > 0 && subtotal >= freeShippingThreshold
+      ? 0
+      : configuredShipping;
+
+    if (!isPickup && !addressId) {
+      throw new ApiError(400, "La dirección de envío es obligatoria.");
+    }
 
     let orderId;
     try {
       orderId = await OrderRepository.create({
         userId,
-        addressId,
+        addressId: isPickup ? null : addressId,
         warehouseId,
         lines,
         shippingCost,
@@ -159,6 +172,7 @@ class OrderService {
         discount,
         couponId,
         notes,
+        deliveryMethod: isPickup ? "PICKUP" : "SHIPPING",
       });
     } catch (err) {
       // El trigger trg_order_details_bi lanza un error SQL amigable cuando

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import { STORE_LOCAL, STORE_ADDRESS_TEXT, STORE_MAPS_LINK } from "../../constants/store";
 import styles from "./FAQ.module.css";
 
 // Contenido estático: no existe todavía una tabla de FAQ en el backend, así
@@ -39,6 +40,16 @@ const FAQ_ITEMS = [
     answer:
       "Sí, hacemos envíos a toda la República Mexicana. El costo de envío y si aplica envío gratis se calculan en tu carrito antes de pagar.",
   },
+  {
+    question: "¿Puedo recoger mi pedido en tienda?",
+    answer:
+      "Sí. Puedes seleccionar la opción \"Recoger en tienda\" durante el proceso de compra. Esta modalidad no tiene costo de envío.",
+  },
+  {
+    question: "¿Dónde están ubicados?",
+    answer: `Estamos ubicados en ${STORE_ADDRESS_TEXT}, ${STORE_LOCAL}.`,
+    mapsLink: STORE_MAPS_LINK,
+  },
 ];
 
 function FAQItem({ item, isOpen, onToggle }) {
@@ -48,7 +59,19 @@ function FAQItem({ item, isOpen, onToggle }) {
         <span>{item.question}</span>
         <ChevronDown size={20} className={isOpen ? styles.chevronOpen : styles.chevron} />
       </button>
-      {isOpen && <p className={styles.answer}>{item.answer}</p>}
+      {isOpen && (
+        <p className={styles.answer}>
+          {item.answer}
+          {item.mapsLink && (
+            <>
+              {" "}
+              <a href={item.mapsLink} target="_blank" rel="noopener noreferrer">
+                Ver en Google Maps
+              </a>
+            </>
+          )}
+        </p>
+      )}
     </div>
   );
 }

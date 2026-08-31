@@ -152,18 +152,21 @@ class ProductService {
 
   // --- Imágenes ---
 
-  async uploadImage(productId, file, { variantId = null, isMain = false } = {}) {
+  async uploadImage(productId, file, { variantId = null, isMain = false, imageUrl = null } = {}) {
     const product = await ProductRepository.getById(productId);
     if (!product) throw new ApiError(404, "Producto no encontrado.");
 
-    if (!file) throw new ApiError(400, "No se recibió ninguna imagen.");
-
-    const result = await uploadBufferToCloudinary(file.buffer, `moster-pink/products/${productId}`);
+    let finalUrl = imageUrl;
+    if (file) {
+      const result = await uploadBufferToCloudinary(file.buffer, `moster-pink/products/${productId}`);
+      finalUrl = result.secure_url;
+    }
+    if (!finalUrl) throw new ApiError(400, "No se recibió ninguna imagen ni URL.");
 
     return ProductRepository.addImage({
       productId,
       variantId,
-      imageUrl: result.secure_url,
+      imageUrl: finalUrl,
       isMain,
     });
   }

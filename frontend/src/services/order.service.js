@@ -15,8 +15,8 @@ const orderService = {
   // addressId es opcional (customer_addresses.id puede ser NULL en orders),
   // pero en la práctica el checkout siempre debería mandar una dirección
   // de envío real.
-  checkout: ({ addressId, notes, couponCode } = {}) =>
-    api.post("/orders/checkout", { addressId, notes, couponCode }),
+  checkout: ({ addressId, notes, couponCode, deliveryMethod } = {}) =>
+    api.post("/orders/checkout", { addressId, notes, couponCode, deliveryMethod }),
 
   getById: (id, signal) => api.get(`/orders/${id}`, null, signal),
 

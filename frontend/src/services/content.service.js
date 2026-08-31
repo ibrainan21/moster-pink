@@ -1,4 +1,6 @@
-import api from "./api";
+import api, { getToken } from "./api";
+
+const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
 // Envuelve /api/content (ver backend: src/modules/content/content.routes.js).
 // La lectura es pública; crear/editar/eliminar/cambiar estado requiere
@@ -14,8 +16,8 @@ const contentService = {
   removeBanner: (id) => api.delete(`/content/banners/${id}`),
 
   // --- Galería (RF-041) ---
-  listGallery: (signal) => api.get("/content/gallery", { onlyActive: true }, signal),
-  listAllGallery: (signal) => api.get("/content/gallery", null, signal),
+  listGallery: (signal, category) => api.get("/content/gallery", { onlyActive: true, category }, signal),
+  listAllGallery: (signal, category) => api.get("/content/gallery", category ? { category } : null, signal),
   createGalleryItem: (data) => api.post("/content/gallery", data),
   updateGalleryItem: (id, data) => api.put(`/content/gallery/${id}`, data),
   setGalleryItemActive: (id, isActive) =>
@@ -33,6 +35,28 @@ const contentService = {
   // --- Información de la empresa (CU-023) ---
   getCompany: (signal) => api.get("/content/company", null, signal),
   saveCompany: (data) => api.put("/content/company", data),
+
+  // --- Subida genérica de imágenes a Cloudinary: multipart/form-data, no
+  // pasa por el wrapper JSON de api.js (mismo patrón que product.admin.service.js).
+  // La usan Categorías, Banners, Galería y "Conócenos" cuando el admin sube
+  // un archivo en vez de pegar una URL.
+  async uploadImage(file) {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const token = getToken();
+    const response = await fetch(`${BASE_URL}/content/upload-image`, {
+      method: "POST",
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      body: formData,
+    });
+
+    const data = await response.json();
+    if (!response.ok || data.success === false) {
+      throw new Error(data.message || `Error ${response.status}`);
+    }
+    return data.data; // { imageUrl }
+  },
 };
 
 export default contentService;

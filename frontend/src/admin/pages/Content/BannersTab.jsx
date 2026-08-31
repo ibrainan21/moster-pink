@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Plus, Pencil, Trash2, Power, X } from "lucide-react";
 import useFetch from "../../../hooks/useFetch";
 import contentService from "../../../services/content.service";
+import ImageUploadField from "../../../components/ImageUploadField/ImageUploadField";
 import styles from "./AdminContent.module.css";
 
 const TYPE_LABELS = {
@@ -231,11 +232,7 @@ function BannerModal({ banner, onClose, onSuccess }) {
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} autoFocus />
           </div>
 
-          <div className={styles.modalField}>
-            <label>URL de la imagen</label>
-            <input type="text" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
-            {imageUrl && <img src={imageUrl} alt="" className={styles.preview} />}
-          </div>
+          <ImageUploadField label="Imagen" value={imageUrl} onChange={setImageUrl} previewClassName={styles.preview} />
 
           <div className={styles.modalField}>
             <label>Enlace al hacer clic (opcional)</label>

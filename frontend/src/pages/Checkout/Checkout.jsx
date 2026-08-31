@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Navigate, Link } from "react-router-dom";
-import { MapPin, Plus } from "lucide-react";
+import { MapPin, Plus, Truck, Store } from "lucide-react";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import useFetch from "../../hooks/useFetch";
@@ -9,6 +9,7 @@ import orderService from "../../services/order.service";
 import promotionService from "../../services/promotion.service";
 import settingsService from "../../services/settings.service";
 import { useCart } from "../../context/CartContext";
+import { STORE_LOCAL, STORE_ADDRESS_TEXT } from "../../constants/store";
 import styles from "./Checkout.module.css";
 
 const formatPrice = (value) =>
@@ -47,6 +48,7 @@ function Checkout() {
   } = useFetch((signal) => addressService.list(signal), []);
 
   const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const [deliveryMethod, setDeliveryMethod] = useState("SHIPPING"); // "SHIPPING" | "PICKUP"
   const [prevAddresses, setPrevAddresses] = useState(null);
   if (addresses && prevAddresses !== addresses) {
     setPrevAddresses(addresses);
@@ -111,12 +113,18 @@ function Checkout() {
 
   const discount = appliedCoupon?.discount || 0;
 
+  const isPickup = deliveryMethod === "PICKUP";
+
   // Igual que el backend (order.service.js checkoutFromCart): el umbral de
   // envío gratis y el impuesto se calculan sobre el subtotal SIN descuento.
-  const shippingCost =
-    shippingConfig && shippingConfig.freeShippingThreshold > 0 && cart.total >= shippingConfig.freeShippingThreshold
-      ? 0
-      : shippingConfig?.shippingCost ?? 0;
+  // Si es "recoger en tienda" el envío siempre es $0, sin importar el
+  // umbral configurado — el cálculo real y definitivo lo hace el backend,
+  // esto solo refleja lo mismo para que el total mostrado no engañe.
+  const shippingCost = isPickup
+    ? 0
+    : shippingConfig && shippingConfig.freeShippingThreshold > 0 && cart.total >= shippingConfig.freeShippingThreshold
+    ? 0
+    : shippingConfig?.shippingCost ?? 0;
   const taxAmount = shippingConfig ? cart.total * (shippingConfig.taxRate / 100) : 0;
   const totalWithDiscount = Math.max(0, Number(cart.total) + shippingCost + taxAmount - discount);
 
@@ -144,7 +152,7 @@ function Checkout() {
   const handleConfirmOrder = async () => {
     setOrderError("");
 
-    if (!selectedAddressId) {
+    if (!isPickup && !selectedAddressId) {
       setOrderError("Selecciona o agrega una dirección de envío.");
       return;
     }
@@ -157,7 +165,8 @@ function Checkout() {
     setPlacingOrder(true);
     try {
       const result = await orderService.checkout({
-        addressId: selectedAddressId,
+        addressId: isPickup ? undefined : selectedAddressId,
+        deliveryMethod,
         notes: notes || undefined,
         couponCode: couponCode || undefined,
       });
@@ -198,6 +207,47 @@ function Checkout() {
 
         <div className={styles.layout}>
           <div className={styles.main}>
+            <section className={styles.section}>
+              <h2 className={styles.sectionTitle}>Modalidad de entrega</h2>
+              <div className={styles.deliveryOptions}>
+                <label
+                  className={`${styles.deliveryOption} ${!isPickup ? styles.deliveryOptionActive : ""}`}
+                >
+                  <input
+                    type="radio"
+                    name="deliveryMethod"
+                    checked={!isPickup}
+                    onChange={() => setDeliveryMethod("SHIPPING")}
+                  />
+                  <Truck size={18} />
+                  Envío a domicilio
+                </label>
+                <label
+                  className={`${styles.deliveryOption} ${isPickup ? styles.deliveryOptionActive : ""}`}
+                >
+                  <input
+                    type="radio"
+                    name="deliveryMethod"
+                    checked={isPickup}
+                    onChange={() => setDeliveryMethod("PICKUP")}
+                  />
+                  <Store size={18} />
+                  Recoger en tienda
+                </label>
+              </div>
+            </section>
+
+            {isPickup ? (
+              <section className={styles.section}>
+                <h2 className={styles.sectionTitle}>
+                  <Store size={18} /> Recoger en tienda
+                </h2>
+                <p className={styles.state}>
+                  Tu pedido estará disponible en {STORE_LOCAL}, {STORE_ADDRESS_TEXT}. No tiene
+                  costo de envío. Te avisaremos por correo cuando esté listo.
+                </p>
+              </section>
+            ) : (
             <section className={styles.section}>
               <h2 className={styles.sectionTitle}>
                 <MapPin size={18} /> Dirección de envío
@@ -349,6 +399,7 @@ function Checkout() {
                 </form>
               )}
             </section>
+            )}
 
             <section className={styles.section}>
               <h2 className={styles.sectionTitle}>Notas y cupón</h2>

@@ -106,6 +106,7 @@ function AdminOrders() {
                 <th>Folio</th>
                 <th>Cliente</th>
                 <th>Fecha</th>
+                <th>Entrega</th>
                 <th>Estado</th>
                 <th>Total</th>
                 <th></th>
@@ -121,6 +122,13 @@ function AdminOrders() {
                   <td className={styles.orderNumber}>{order.order_number}</td>
                   <td>{order.customer_name}</td>
                   <td className={styles.muted}>{formatDate(order.order_date)}</td>
+                  <td>
+                    {order.delivery_method === "PICKUP" ? (
+                      <span className={styles.pickupBadge}>Recoger en tienda</span>
+                    ) : (
+                      <span className={styles.muted}>Envío a domicilio</span>
+                    )}
+                  </td>
                   <td>
                     <span className={`${styles.statusBadge} ${styles[STATUS_CLASS[order.status]]}`}>
                       {STATUS_LABELS[order.status] || order.status}

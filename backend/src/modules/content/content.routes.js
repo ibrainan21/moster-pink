@@ -14,6 +14,7 @@ import {
 } from "./content.validation.js";
 import validate from "../../middlewares/validate.middleware.js";
 import { verifyAuth, authorize } from "../../middlewares/auth.middleware.js";
+import upload from "../../middlewares/upload.middleware.js";
 
 const router = Router();
 
@@ -58,5 +59,10 @@ router.patch(
 router.delete("/social/:id", idParamValidation, validate, ContentController.removeSocial);
 
 router.put("/company", saveCompanyValidation, validate, ContentController.saveCompany);
+
+// Subida genérica de imágenes a Cloudinary (Categorías, Banners, Galería,
+// "Conócenos"). Devuelve { imageUrl } para que el formulario que la llamó
+// la use como si el admin hubiera pegado una URL manualmente.
+router.post("/upload-image", upload.single("image"), ContentController.uploadImage);
 
 export default router;

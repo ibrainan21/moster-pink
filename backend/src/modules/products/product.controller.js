@@ -55,10 +55,11 @@ class ProductController {
 
   // POST /api/products/:id/images  (multipart/form-data, campo "image")
   uploadImage = asyncHandler(async (req, res) => {
-    const { variantId, isMain } = req.body;
+    const { variantId, isMain, imageUrl } = req.body;
     const image = await ProductService.uploadImage(req.params.id, req.file, {
       variantId: variantId || null,
       isMain: isMain === "true" || isMain === true,
+      imageUrl: imageUrl || null,
     });
     res.status(201).json(ApiResponse.success("Imagen subida correctamente.", image));
   });
