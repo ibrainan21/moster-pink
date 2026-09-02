@@ -39,7 +39,7 @@ const emptyAddressForm = {
  */
 function Checkout() {
   const navigate = useNavigate();
-  const { cart, refresh } = useCart();
+  const { cart, refresh, loaded: cartLoaded } = useCart();
 
   const {
     data: addresses,
@@ -83,6 +83,24 @@ function Checkout() {
 
   // Si el carrito está vacío no tiene sentido mostrar el checkout —
   // regresamos directo a /carrito (que ya explica el estado vacío).
+  // OJO: solo una vez que el carrito ya terminó de cargar ("loaded").
+  // Antes esto se decidía con el primer render, donde "items" todavía
+  // estaba en [] mientras llegaba la respuesta del carrito (el fetch lo
+  // dispara el Header en un useEffect, que corre DESPUÉS del primer
+  // render) — eso expulsaba al cliente del checkout en cada refresh de
+  // página, aunque sí tuviera productos.
+  if (!cartLoaded) {
+    return (
+      <>
+        <Header />
+        <div className={styles.page}>
+          <p className={styles.state}>Cargando tu carrito...</p>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
   if (!items.length) {
     return <Navigate to="/carrito" replace />;
   }
@@ -238,7 +256,7 @@ function Checkout() {
             </section>
 
             {isPickup ? (
-              <section className={styles.section}>
+              <section key="pickup-info" className={styles.section}>
                 <h2 className={styles.sectionTitle}>
                   <Store size={18} /> Recoger en tienda
                 </h2>
@@ -248,7 +266,7 @@ function Checkout() {
                 </p>
               </section>
             ) : (
-            <section className={styles.section}>
+            <section key="shipping-address" className={styles.section}>
               <h2 className={styles.sectionTitle}>
                 <MapPin size={18} /> Dirección de envío
               </h2>
